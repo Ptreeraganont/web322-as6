@@ -32,6 +32,7 @@ const initialize = () => new Promise((resolve, reject) => {
 
 	db.once('open', () => {
 		User = db.model("users", userSchema);
+		console.log('connect mongodb successfully')
 		resolve();
 	});
 })

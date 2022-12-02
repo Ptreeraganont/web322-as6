@@ -1,7 +1,10 @@
 const express = require('express')
 const dataService = require('../data-service.js')
+const { ensureLogin } = require('../middleware/index.js')
 
 const router = express.Router()
+
+router.use('/', ensureLogin)
 
 router.get('/students', (req, res) => {
 	const { status, program, credential } = req.query

@@ -59,10 +59,12 @@ const initialize = () =>
 		sequelize
 			.authenticate()
 			.then(function () {
-				resolve('Connection has been established successfully.')
+				console.log('Connection has been established successfully.')
+				resolve()
 			})
 			.catch(function (err) {
-				reject('Unable to connect to the database:' + err)
+				console.error('Unable to connect to the database:' + err)
+				reject()
 			})
 	})
 

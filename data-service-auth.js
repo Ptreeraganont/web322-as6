@@ -27,6 +27,7 @@ const initialize = () => new Promise((resolve, reject) => {
 	let db = mongoose.createConnection("mongodb+srv://ptreeraganont:Pt15031981@senecaweb.ql5vzig.mongodb.net/test");
 
 	db.on('error', (err) => {
+		console.error(err)
 		reject(err); // reject the promise with the provided error
 	});
 

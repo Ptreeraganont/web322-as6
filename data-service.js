@@ -24,15 +24,6 @@ var sequelize = new Sequelize(
 	}
 )
 
-sequelize
-	.authenticate()
-	.then(function () {
-		console.log('Connection has been established successfully.')
-	})
-	.catch(function (err) {
-		console.log('Unable to connect to the database:', err)
-	})
-
 const Student = sequelize.define('Student', {
 	studentID: {
 		type: Sequelize.INTEGER,
@@ -66,32 +57,52 @@ Program.hasMany(Student, { foreignKey: 'program' })
 const initialize = () =>
 	new Promise((resolve, reject) => {
 		sequelize
-			.sync()
-			.then(() => {
-				resolve()
+			.authenticate()
+			.then(function () {
+				resolve('Connection has been established successfully.')
 			})
-			.catch(() => reject('https://www.f0nt.com/release/th-sarabun-new/'))
+			.catch(function (err) {
+				reject('Unable to connect to the database:' + err)
+			})
 	})
 
 const getAllStudents = () =>
 	new Promise((resolve, reject) => {
-		Student.findAll()
-			.then((res) => resolve(res))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.findAll()
+					.then((res) => resolve(res))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getInternationalStudents = () =>
 	new Promise((resolve, reject) => {
-		Student.findAll({ where: { isInternationalStudent: true } })
-			.then((res) => resolve(res))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.findAll({ where: { isInternationalStudent: true } })
+					.then((res) => resolve(res))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getPrograms = () =>
 	new Promise((resolve, reject) => {
-		Program.findAll()
-			.then((res) => resolve(res))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Program.findAll()
+					.then((res) => resolve(res))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const addStudent = (studentData) =>
@@ -104,37 +115,67 @@ const addStudent = (studentData) =>
 				studentData[key] = null
 			}
 		}
-		Student.create(studentData)
-			.then((res) => resolve(res))
-			.catch(() => reject('unable to create student'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.create(studentData)
+					.then((res) => resolve(res))
+					.catch(() => reject('unable to create student'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getStudentsByStatus = (status) =>
 	new Promise((resolve, reject) => {
-		Student.findAll({ where: { status } })
-			.then((res) => resolve(res))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.findAll({ where: { status } })
+					.then((res) => resolve(res))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getStudentsByProgramCode = (programCode) =>
 	new Promise((resolve, reject) => {
-		Student.findAll({ where: { programCode } })
-			.then((res) => resolve(res))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.findAll({ where: { programCode } })
+					.then((res) => resolve(res))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getStudentsByExpectedCredential = (credential) =>
 	new Promise((resolve, reject) => {
-		Student.findAll({ where: { expectedCredential: credential } })
-			.then((res) => resolve(res))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.findAll({ where: { expectedCredential: credential } })
+					.then((res) => resolve(res))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getStudentById = (sid) =>
 	new Promise((resolve, reject) => {
-		Student.findAll({ where: { studentID: sid } })
-			.then((res) => resolve(res[0]))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.findAll({ where: { studentID: sid } })
+					.then((res) => resolve(res[0]))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const updateStudent = (studentData) =>
@@ -147,9 +188,15 @@ const updateStudent = (studentData) =>
 				studentData[key] = null
 			}
 		}
-		Student.update(studentData, { where: { studentID: studentData.studentID } })
-			.then((res) => resolve(res))
-			.catch(() => reject('unable to update student'))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.update(studentData, { where: { studentID: studentData.studentID } })
+					.then((res) => resolve(res))
+					.catch(() => reject('unable to update student'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const addProgram = (programData) =>
@@ -159,9 +206,15 @@ const addProgram = (programData) =>
 				programData[key] = null
 			}
 		}
-		Program.create(programData)
-			.then((res) => resolve(res))
-			.catch(() => reject('unable to create program'))
+		sequelize
+			.sync()
+			.then(() => {
+				Program.create(programData)
+					.then((res) => resolve(res))
+					.catch(() => reject('unable to create program'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const updateProgram = (programData) =>
@@ -171,30 +224,54 @@ const updateProgram = (programData) =>
 				programData[key] = null
 			}
 		}
-		Program.update(programData)
-			.then((res) => resolve(res))
-			.catch(() => reject('unable to update program'))
+		sequelize
+			.sync()
+			.then(() => {
+				Program.update(programData)
+					.then((res) => resolve(res))
+					.catch(() => reject('unable to update program'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const getProgramByCode = (pcode) =>
 	new Promise((resolve, reject) => {
-		Program.findAll({ where: { programCode: pcode } })
-			.then((res) => resolve(res[0]))
-			.catch(() => reject('no results returned'))
+		sequelize
+			.sync()
+			.then(() => {
+				Program.findAll({ where: { programCode: pcode } })
+					.then((res) => resolve(res[0]))
+					.catch(() => reject('no results returned'))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const deleteProgramByCode = (pcode) =>
 	new Promise((resolve, reject) => {
-		Program.destroy({ where: { programCode: pcode } })
-			.then(() => resolve('destroyed'))
-			.catch((err) => reject(err))
+		sequelize
+			.sync()
+			.then(() => {
+				Program.destroy({ where: { programCode: pcode } })
+					.then(() => resolve('destroyed'))
+					.catch((err) => reject(err))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 const deleteStudentById = (id) =>
 	new Promise((resolve, reject) => {
-		Student.destroy({ where: { studentID: id } })
-			.then(() => resolve('destroyed'))
-			.catch((err) => reject(err))
+		sequelize
+			.sync()
+			.then(() => {
+				Student.destroy({ where: { studentID: id } })
+					.then(() => resolve('destroyed'))
+					.catch((err) => reject(err))
+			}).catch(() => {
+				reject('failed to sync')
+			})
 	})
 
 module.exports = {

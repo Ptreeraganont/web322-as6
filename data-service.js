@@ -4,9 +4,9 @@ const Sequelize = require('sequelize')
  * @type {Sequelize.Sequelize}
  */
 var sequelize = new Sequelize(
-	'venbfcaj',
-	'venbfcaj',
-	'SEA9jM4hYAF0JBEOcU81WsmKzInr_PDW',
+	'vtgipzfs',
+	'vtgipzfs',
+	'4vlhUac4XkSBiEgC9r-qc15J19x1uM8R',
 	{
 		host: 'peanut.db.elephantsql.com',
 		dialect: 'postgres',
